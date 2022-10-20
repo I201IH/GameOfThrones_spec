@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("serial")
 public class GameOfThrones extends CardGame {
+    public static final String DEFAULT_PATH = "properties/got.properties";
 
     enum GoTSuit { CHARACTER, DEFENCE, ATTACK, MAGIC }
     public enum Suit {
@@ -463,14 +464,16 @@ public class GameOfThrones extends CardGame {
     }
 
     public static void main(String[] args) {
-        // System.out.println("Working Directory = " + System.getProperty("user.dir"));
-        // final Properties properties = new Properties();
-        // properties.setProperty("watchingTime", "5000");
-        /*
+         System.out.println("Working Directory = " + System.getProperty("user.dir"));
+         Properties properties = new Properties();
+         properties.setProperty("watchingTime", "5000");
+
+
+
         if (args == null || args.length == 0) {
-            //  properties = PropertiesLoader.loadPropertiesFile("cribbage.properties");
+              properties = PropertiesLoader.loadPropertiesFile(DEFAULT_PATH);
         } else {
-            //  properties = PropertiesLoader.loadPropertiesFile(args[0]);
+              properties = PropertiesLoader.loadPropertiesFile(args[0]);
         }
 
         String seedProp = properties.getProperty("seed");  //Seed property
@@ -479,7 +482,7 @@ public class GameOfThrones extends CardGame {
         } else { // and no property
 			  seed = new Random().nextInt(); // so randomise
         }
-        */
+
         GameOfThrones.seed = 130006;
         System.out.println("Seed = " + seed);
         GameOfThrones.random = new Random(seed);
