@@ -20,6 +20,8 @@ public class GameOfThrones extends CardGame {
     public static final String DEFAULT_PATH = "properties/got.properties";
     static public int seed;
     static Random random;
+    private PlayerType[] players;
+
 
     // return random Card from Hand
     public static Card randomCard(Hand hand) {
@@ -144,18 +146,25 @@ public class GameOfThrones extends CardGame {
     private final int UNDEFINED_INDEX = -1;
     private final int ATTACK_RANK_INDEX = 0;
     private final int DEFENCE_RANK_INDEX = 1;
-    private void setupGame() {
+
+
+
+    private void setupGame(Properties properties) {
+
+
         hands = new Hand[nbPlayers];
         for (int i = 0; i < nbPlayers; i++) {
             hands[i] = new Hand(deck);
         }
         dealingOut(hands, nbPlayers, nbStartCards);
 
+        //得到手牌Hand
         for (int i = 0; i < nbPlayers; i++) {
             hands[i].sort(Hand.SortType.SUITPRIORITY, true);
             System.out.println("hands[" + i + "]: " + canonical(hands[i]));
         }
 
+        // for human player
         for (final Hand currentHand : hands) {
             // Set up human player for interaction
             currentHand.addCardListener(new CardAdapter() {
@@ -169,6 +178,7 @@ public class GameOfThrones extends CardGame {
                 }
             });
         }
+
         // graphics
         RowLayout[] layouts = new RowLayout[nbPlayers];
         for (int i = 0; i < nbPlayers; i++) {
@@ -463,14 +473,14 @@ public class GameOfThrones extends CardGame {
         delay(watchingTime);
     }
 
-    public GameOfThrones() {
+    public GameOfThrones(Properties properties) {
         super(700, 700, 30);
 
         setTitle("Game of Thrones (V" + version + ") Constructed for UofM SWEN30006 with JGameGrid (www.aplu.ch)");
         setStatusText("Initializing...");
         initScore();
 
-        setupGame();
+        setupGame(properties);
         for (int i = 0; i < nbPlays; i++) {
             executeAPlay();
             updateScores();

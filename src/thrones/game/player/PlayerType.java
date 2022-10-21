@@ -10,4 +10,16 @@ public abstract class PlayerType {
     private int playerIndex;
 
     protected PlayingStrategy strategy;
+
+    public PlayerType(){}
+
+
+
+    public Hand getHand(){
+        return hand;
+    }
+
+    public void setHand(Hand hand){
+        this.hand = hand;
+    }
 }
