@@ -4,69 +4,20 @@ package thrones.game;
 
 import ch.aplu.jcardgame.*;
 import ch.aplu.jgamegrid.*;
+import thrones.game.logics.*;
+import thrones.game.logics.CardLogic.*;
+import thrones.game.factory.PlayerFactory;
+import thrones.game.player.PlayerType;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.io.FileReader;
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static thrones.game.logics.CardLogic.*;
 
 @SuppressWarnings("serial")
 public class GameOfThrones extends CardGame {
     public static final String DEFAULT_PATH = "properties/got.properties";
-
-    enum GoTSuit { CHARACTER, DEFENCE, ATTACK, MAGIC }
-    public enum Suit {
-        SPADES(GoTSuit.DEFENCE),
-        HEARTS(GoTSuit.CHARACTER),
-        DIAMONDS(GoTSuit.MAGIC),
-        CLUBS(GoTSuit.ATTACK);
-        Suit(GoTSuit gotsuit) {
-            this.gotsuit = gotsuit;
-        }
-        private final GoTSuit gotsuit;
-
-        public boolean isDefence(){ return gotsuit == GoTSuit.DEFENCE; }
-
-        public boolean isAttack(){ return gotsuit == GoTSuit.ATTACK; }
-
-        public boolean isCharacter(){ return gotsuit == GoTSuit.CHARACTER; }
-
-        public boolean isMagic(){ return gotsuit == GoTSuit.MAGIC; }
-    }
-
-    public enum Rank {
-        // Reverse order of rank importance (see rankGreater() below)
-        // Order of cards is tied to card images
-        ACE(1), KING(10), QUEEN(10), JACK(10), TEN(10), NINE(9), EIGHT(8), SEVEN(7), SIX(6), FIVE(5), FOUR(4), THREE(3), TWO(2);
-        Rank(int rankValue) {
-            this.rankValue = rankValue;
-        }
-        private final int rankValue;
-        public int getRankValue() {
-            return rankValue;
-        }
-    }
-
-    /*
-    Canonical String representations of Suit, Rank, Card, and Hand
-    */
-    String canonical(Suit s) { return s.toString().substring(0, 1); }
-
-    String canonical(Rank r) {
-        switch (r) {
-            case ACE: case KING: case QUEEN: case JACK: case TEN:
-                return r.toString().substring(0, 1);
-            default:
-                return String.valueOf(r.getRankValue());
-        }
-    }
-
-    String canonical(Card c) { return canonical((Rank) c.getRank()) + canonical((Suit) c.getSuit()); }
-
-    String canonical(Hand h) {
-        return "[" + h.getCardList().stream().map(this::canonical).collect(Collectors.joining(",")) + "]";
-    }
     static public int seed;
     static Random random;
 
@@ -118,7 +69,7 @@ public class GameOfThrones extends CardGame {
 	public final int nbRounds = 3;
     private final int handWidth = 400;
     private final int pileWidth = 40;
-    private Deck deck = new Deck(Suit.values(), Rank.values(), "cover");
+    private Deck deck = new Deck(CardLogic.Suit.values(), CardLogic.Rank.values(), "cover");
     private final Location[] handLocations = {
             new Location(350, 625),
             new Location(75, 350),
@@ -468,8 +419,6 @@ public class GameOfThrones extends CardGame {
          Properties properties = new Properties();
          properties.setProperty("watchingTime", "5000");
 
-
-
         if (args == null || args.length == 0) {
               properties = PropertiesLoader.loadPropertiesFile(DEFAULT_PATH);
         } else {
@@ -486,7 +435,7 @@ public class GameOfThrones extends CardGame {
         GameOfThrones.seed = 130006;
         System.out.println("Seed = " + seed);
         GameOfThrones.random = new Random(seed);
-        new GameOfThrones();
+        new GameOfThrones(properties);//check later
     }
 
 }
