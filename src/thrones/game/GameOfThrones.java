@@ -265,8 +265,84 @@ public class GameOfThrones extends CardGame {
 
     private int[] calculatePileRanks(int pileIndex) {
         Hand currentPile = piles[pileIndex];
-        int i = currentPile.isEmpty() ? 0 : ((Rank) currentPile.get(0).getRank()).getRankValue();
-        return new int[] { i, i };
+
+        int attackRank = 0;
+        int defenceRank= 0;
+        int characterRank= 0;
+
+        // empty pile
+        if (currentPile.isEmpty()) {
+            return new int[] { attackRank, defenceRank };
+        }
+
+        // otherwise, more than one card
+        else {
+
+            // starts with character card
+            characterRank = ((Rank) currentPile.get(0).getRank()).getRankValue();
+            attackRank = characterRank;
+            defenceRank = characterRank;
+
+            int i = 1;
+
+            while (i < currentPile.getNumberOfCards()) {
+
+                Suit checkedCard = (Suit) currentPile.get(i).getSuit();
+                int checkedCardValue = ((Rank) currentPile.get(i).getRank()).getRankValue();
+                int previousCardValue = ((Rank) currentPile.get(i - 1).getRank()).getRankValue();
+
+                // double value
+                checkedCardValue = canDoubleValue(checkedCardValue, previousCardValue);
+
+                // increase attack score
+                if (checkedCard.isAttack()) {
+                    attackRank += checkedCardValue;
+                    int[] result = checkForDiamond(i, currentPile, attackRank);
+                    i = result[0];
+                    attackRank = result[1];
+                } else if (checkedCard.isDefence()) {
+                    defenceRank += checkedCardValue;
+                    int[] result = checkForDiamond(i, currentPile, defenceRank);
+                    i = result[0];
+                    defenceRank = result[1];
+                }
+                i++;
+            }
+        }
+
+        if (attackRank < 0) {
+            attackRank = 0;
+        }
+        if (defenceRank < 0) {
+            defenceRank = 0;
+        }
+        return new int[] { attackRank, defenceRank };
+    }
+
+    private int canDoubleValue(int checkedCardValue, int previousCardValue) {
+        if (checkedCardValue == previousCardValue) {
+            checkedCardValue *= 2;
+        }
+        return checkedCardValue;
+    }
+
+    private int[] checkForDiamond(int i, Hand currentPile, int rank) {
+        int j;
+        for (j = i + 1; j < currentPile.getNumberOfCards(); j++) {
+            Suit checkForDiamond = (Suit) currentPile.get(j).getSuit();
+
+            if (checkForDiamond.isMagic()) {
+                int checkForDiamondValue = ((Rank) currentPile.get(j).getRank()).getRankValue();
+                int prev = ((Rank) currentPile.get(j-1).getRank()).getRankValue();
+                checkForDiamondValue = canDoubleValue(checkForDiamondValue, prev);
+                rank -= checkForDiamondValue;
+
+            } else {
+                break;
+            }
+        }
+        i = j - 1;
+        return new int[] {i, rank};
     }
 
     private void updatePileRankState(int pileIndex, int attackRank, int defenceRank) {
