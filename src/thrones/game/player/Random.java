@@ -49,7 +49,6 @@ public class Random extends PlayerType {
     public int selectPile(Card card, int playerIndex){
         int pileIndex = -1;
         pileIndex = GameOfThrones.random.nextInt(2);
-        System.out.println("pileIndex is "+pileIndex);
         return pileIndex;
     }
 }

@@ -34,7 +34,7 @@ public abstract class PlayerType {
             return false;
         }
         if (numPile == 1 &&  cardSuit.isMagic()) {
-            //System.out.println("check");
+            System.out.println("check");
             return false;
         }
 

@@ -200,7 +200,13 @@ public class GameOfThrones extends CardGame {
         //create different types of player from property file
         for (int i = 0; i < nbPlayers; i++) {
             players[i] = playerFactory.getPlayer(i,properties.getProperty(String.format("players.%d", i)));
+            if (properties.getProperty(String.format("players.%d", i)).equals("human")){
+                humanPlayers[i] = true;
+            }
         }
+
+
+
         //give each player a deck as the original hand
         for (int i = 0; i < nbPlayers; i++) {
             players[i].setHand(new Hand(deck));
@@ -359,28 +365,53 @@ public class GameOfThrones extends CardGame {
     }
 
     private void waitForCorrectSuit(int playerIndex, boolean isCharacter) {
-        if (hands[playerIndex].isEmpty()) {
+        if (players[playerIndex].getHand().isEmpty()) {
             selected = Optional.empty();
         } else {
             selected = null;
-            hands[playerIndex].setTouchEnabled(true);
+            players[playerIndex].getHand().setTouchEnabled(true);
             do {
                 if (selected == null) {
                     delay(100);
                     continue;
                 }
                 Suit suit = selected.isPresent() ? (Suit) selected.get().getSuit() : null;
+                /*
+                if (!isPreviousH){
+                    if (isCharacter && suit != null && suit.isCharacter() ||         // If we want character, can't pass and suit must be right
+                            !isCharacter && (suit == null || !suit.isCharacter())) { // If we don't want character, can pass or suit must not be character
+                        // if (suit != null && suit.isCharacter() == isCharacter) {
+                        break;
+                    } else {
+                        selected = null;
+                        players[playerIndex].getHand().setTouchEnabled(true);
+                    }
+                }
+                else {
+                    if (isCharacter && suit != null && suit.isCharacter() && !suit.isMagic() ||         // If we want character, can't pass and suit must be right
+                            !isCharacter && !suit.isMagic() && (suit == null || !suit.isCharacter())) { // If we don't want character, can pass or suit must not be character
+                        // if (suit != null && suit.isCharacter() == isCharacter) {
+                        break;
+                    } else {
+                        selected = null;
+                        players[playerIndex].getHand().setTouchEnabled(true);
+                    }
+                }
+
+                 */
                 if (isCharacter && suit != null && suit.isCharacter() ||         // If we want character, can't pass and suit must be right
                         !isCharacter && (suit == null || !suit.isCharacter())) { // If we don't want character, can pass or suit must not be character
                     // if (suit != null && suit.isCharacter() == isCharacter) {
                     break;
                 } else {
                     selected = null;
-                    hands[playerIndex].setTouchEnabled(true);
+                    players[playerIndex].getHand().setTouchEnabled(true);
                 }
                 delay(100);
             } while (true);
         }
+
+
     }
 
     private void waitForPileSelection() {
@@ -557,9 +588,17 @@ public class GameOfThrones extends CardGame {
         // 2: play the remaining nbPlayers * nbRounds - 2
         int remainingTurns = nbPlayers * nbRounds - 2;
         int nextPlayer = nextStartingPlayer + 2;
+        //System.out.println("nextStart"+nextStartingPlayer);
+        //System.out.println("nextPlayer before while"+nextPlayer);
 
         while(remainingTurns > 0) {
             nextPlayer = getPlayerIndex(nextPlayer);
+            /*
+            if (nextPlayer==1){
+                System.out.println("Check");
+            }
+
+             */
             setStatusText("Player" + nextPlayer + " select a non-Heart card to play.");
             if (humanPlayers[nextPlayer]) {
                 waitForCorrectSuit(nextPlayer, false);
@@ -581,9 +620,34 @@ public class GameOfThrones extends CardGame {
                 selected.get().setVerso(false);
                 //System.out.println(players[nextPlayer].getCard());
 
+                /*
                 if (players[nextPlayer].isLegal(players[nextPlayer].getCard(), piles[selectedPileIndex])){
                     selected.get().transfer(piles[selectedPileIndex], true); // transfer to pile (includes graphic effect)
                 }
+
+                 */
+
+
+                if (!humanPlayers[nextPlayer]){
+                    if (players[nextPlayer].isLegal(players[nextPlayer].getCard(), piles[selectedPileIndex])){
+                        selected.get().transfer(piles[selectedPileIndex], true); // transfer to pile (includes graphic effect)
+                    }
+                    //System.out.println("If illegal: BrokeRule");
+                }
+                else {
+                    int index = piles[selectedPileIndex].getNumberOfCards()-1;
+                    Suit lastPile = (Suit) piles[selectedPileIndex].get(index).getSuit();
+                    Suit selectedSuit =  (Suit) selected.get().getSuit();
+                    if (lastPile.isCharacter() && selectedSuit.isMagic()) {
+                        //System.out.println("BrokeRule");
+                    }
+                    else {
+                        selected.get().transfer(piles[selectedPileIndex], true); // transfer to pile (includes graphic effect)
+                    }
+                }
+
+
+
 
                 //selected.get().transfer(piles[selectedPileIndex], true); // transfer to pile (includes graphic effect)
                 updatePileRanks();
