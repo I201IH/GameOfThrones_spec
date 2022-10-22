@@ -19,7 +19,7 @@ import static thrones.game.logics.CardLogic.*;
 public class GameOfThrones extends CardGame {
     public static final String DEFAULT_PATH = "properties/got.properties";
     static public int seed;
-    static Random random;
+    public static Random random;
     private PlayerType[] players;
 
 
@@ -521,7 +521,8 @@ public class GameOfThrones extends CardGame {
             if (humanPlayers[playerIndex]) {
                 waitForCorrectSuit(playerIndex, true);
             } else {
-                pickACorrectSuit(playerIndex, true);
+                selected = players[playerIndex].correctSuit(players[playerIndex].getHand(), true);
+                //pickACorrectSuit(playerIndex, true);
             }
 
             int pileIndex = playerIndex % 2;
@@ -542,7 +543,8 @@ public class GameOfThrones extends CardGame {
             if (humanPlayers[nextPlayer]) {
                 waitForCorrectSuit(nextPlayer, false);
             } else {
-                pickACorrectSuit(nextPlayer, false);
+                selected = players[nextPlayer].correctSuit(players[nextPlayer].getHand(), false);
+                //pickACorrectSuit(nextPlayer, false);
             }
 
             if (selected.isPresent()) {
@@ -643,24 +645,13 @@ public class GameOfThrones extends CardGame {
 
     public static void main(String[] args) {
          System.out.println("Working Directory = " + System.getProperty("user.dir"));
-         Properties properties = new Properties();
-         properties.setProperty("watchingTime", "5000");
-
+        Properties properties = new Properties();
         if (args == null || args.length == 0) {
-              properties = PropertiesLoader.loadPropertiesFile(DEFAULT_PATH);
+            properties = PropertiesLoader.loadPropertiesFile(DEFAULT_PATH);
         } else {
-              properties = PropertiesLoader.loadPropertiesFile(args[0]);
+            properties = PropertiesLoader.loadPropertiesFile(args[0]);
         }
-
-        String seedProp = properties.getProperty("seed");  //Seed property
-        if (seedProp != null) { // Use property seed
-			  seed = Integer.parseInt(seedProp);
-        } else { // and no property
-			  seed = new Random().nextInt(); // so randomise
-        }
-
-        GameOfThrones.seed = 130006;
-        System.out.println("Seed = " + seed);
+        GameOfThrones.seed = Integer.parseInt(properties.getProperty("seed"));
         GameOfThrones.random = new Random(seed);
         new GameOfThrones(properties);//check later
     }
