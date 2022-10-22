@@ -7,5 +7,5 @@ package thrones.game;
 public class BrokeRuleException extends Exception {
 	public BrokeRuleException(String violation) {
 		super(violation);
-	
+	}
 }

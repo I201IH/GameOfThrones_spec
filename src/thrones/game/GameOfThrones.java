@@ -324,6 +324,7 @@ public class GameOfThrones extends CardGame {
             selected = Optional.empty();
         } else {
             selected = Optional.of(shortListCards.get(random.nextInt(shortListCards.size())));
+
         }
 
         //end of code change
@@ -395,22 +396,22 @@ public class GameOfThrones extends CardGame {
     private int[] calculatePileRanks(int pileIndex) {
         Hand currentPile = piles[pileIndex];
 
-        int attackRank = 0;
-        int defenceRank= 0;
-        int characterRank= 0;
+        Heart attackHeart = new Heart(0);
+        Heart defenceHeart = new Heart(0);
+
 
         // empty pile
         if (currentPile.isEmpty()) {
-            return new int[] { attackRank, defenceRank };
+            return new int[] { attackHeart.value(), defenceHeart.value() };
         }
 
         // otherwise, more than one card
         else {
 
             // starts with character card
-            characterRank = ((Rank) currentPile.get(0).getRank()).getRankValue();
-            attackRank = characterRank;
-            defenceRank = characterRank;
+            int characterValue = ((Rank) currentPile.get(0).getRank()).getRankValue();
+            attackHeart.setValue(characterValue);
+            defenceHeart.setValue(characterValue);
 
             int i = 1;
 
@@ -425,29 +426,31 @@ public class GameOfThrones extends CardGame {
 
                 // adjust attack score
                 if (checkedCard.isAttack()) {
-                    attackRank += checkedCardValue;
-                    int[] result = checkForDiamond(i, currentPile, attackRank);
+                    Club attack = new Club(attackHeart, checkedCardValue);
+                    attackHeart.setValue(attack.value());
+                    int[] result = checkForDiamond(i, currentPile, attackHeart);
                     i = result[0];
-                    attackRank = result[1];
+                    attackHeart.setValue(result[1]);
 
                 // adjust defence score
                 } else if (checkedCard.isDefence()) {
-                    defenceRank += checkedCardValue;
-                    int[] result = checkForDiamond(i, currentPile, defenceRank);
+                    Spade defence = new Spade(defenceHeart, checkedCardValue);
+                    defenceHeart.setValue(defence.value());
+                    int[] result = checkForDiamond(i, currentPile, defenceHeart);
                     i = result[0];
-                    defenceRank = result[1];
+                    defenceHeart.setValue(result[1]);
                 }
                 i++;
             }
         }
 
-        if (attackRank < 0) {
-            attackRank = 0;
+        if (attackHeart.value() < 0) {
+            attackHeart.setValue(0);
         }
-        if (defenceRank < 0) {
-            defenceRank = 0;
+        if (defenceHeart.value() < 0) {
+            defenceHeart.setValue(0);
         }
-        return new int[] { attackRank, defenceRank };
+        return new int[] { attackHeart.value(), defenceHeart.value() };
     }
 
     private int canDoubleValue(int checkedCardValue, int previousCardValue) {
@@ -457,7 +460,7 @@ public class GameOfThrones extends CardGame {
         return checkedCardValue;
     }
 
-    private int[] checkForDiamond(int i, Hand currentPile, int rank) {
+    private int[] checkForDiamond(int i, Hand currentPile, Heart heart) {
         int j;
         for (j = i + 1; j < currentPile.getNumberOfCards(); j++) {
             Suit checkForDiamond = (Suit) currentPile.get(j).getSuit();
@@ -466,14 +469,14 @@ public class GameOfThrones extends CardGame {
                 int checkForDiamondValue = ((Rank) currentPile.get(j).getRank()).getRankValue();
                 int prev = ((Rank) currentPile.get(j-1).getRank()).getRankValue();
                 checkForDiamondValue = canDoubleValue(checkForDiamondValue, prev);
-                rank -= checkForDiamondValue;
+                heart.setValue(new Diamond(heart, checkForDiamondValue).value());
 
             } else {
                 break;
             }
         }
         i = j - 1;
-        return new int[] {i, rank};
+        return new int[] {i, heart.value()};
     }
 
     private void updatePileRankState(int pileIndex, int attackRank, int defenceRank) {
@@ -550,6 +553,7 @@ public class GameOfThrones extends CardGame {
                     selectRandomPile();
                 }
                 System.out.println("Player " + nextPlayer + " plays " + canonical(selected.get()) + " on pile " + selectedPileIndex);
+
                 selected.get().setVerso(false);
                 selected.get().transfer(piles[selectedPileIndex], true); // transfer to pile (includes graphic effect)
                 updatePileRanks();
