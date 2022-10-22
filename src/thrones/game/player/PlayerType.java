@@ -41,7 +41,8 @@ public abstract class PlayerType {
         return true;
     }
 
-    public abstract Optional<Card> correctSuit(Hand hand, boolean isCharacter);
+    public abstract Optional<Card> correctSuit(Hand current, boolean isCharacter, int[] pile0ProcessRank,
+                    int[] pile1ProcessRank, Hand next);
     /*
     public Optional<Card> correctSuit(Hand hand, boolean isCharacter) {
         //start of code change

@@ -30,7 +30,8 @@ public class Human extends PlayerType {
         return pileIndex;
     }
 
-    public Optional<Card> correctSuit(Hand hand, boolean isCharacter) {
+    public Optional<Card> correctSuit(Hand hand, boolean isCharacter, int[] pile0ProcessRank,
+                                      int[] pile1ProcessRank, Hand next) {
         //start of code change
         Hand currentHand = hand;
         Card selectedCard;

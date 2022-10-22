@@ -21,6 +21,9 @@ public class GameOfThrones extends CardGame {
     public static Random random;
     private PlayerType[] players;
 
+    private int[] pile0ProcessRank = new int[2];
+    private int[] pile1ProcessRank = new int[2];
+
 
     // return random Card from Hand
     public static Card randomCard(Hand hand) {
@@ -568,12 +571,17 @@ public class GameOfThrones extends CardGame {
 
         // 1: play the first 2 hearts
         for (int i = 0; i < 2; i++) {
+            //calculate the rank during process
+            pile0ProcessRank = calculatePileRanks(0);
+            pile1ProcessRank = calculatePileRanks(1);
+
             int playerIndex = getPlayerIndex(nextStartingPlayer + i);
             setStatusText("Player " + playerIndex + " select a Heart card to play");
             if (humanPlayers[playerIndex]) {
                 waitForCorrectSuit(playerIndex, true);
             } else {
-                selected = players[playerIndex].correctSuit(players[playerIndex].getHand(), true);
+                selected = players[playerIndex].correctSuit(players[playerIndex].getHand(), true,
+                        pile0ProcessRank, pile1ProcessRank, players[getPlayerIndex(playerIndex+1)].getHand());
                 //pickACorrectSuit(playerIndex, true);
             }
 
@@ -603,7 +611,8 @@ public class GameOfThrones extends CardGame {
             if (humanPlayers[nextPlayer]) {
                 waitForCorrectSuit(nextPlayer, false);
             } else {
-                selected = players[nextPlayer].correctSuit(players[nextPlayer].getHand(), false);
+                selected = players[nextPlayer].correctSuit(players[nextPlayer].getHand(), false,
+                        pile0ProcessRank, pile1ProcessRank, players[getPlayerIndex(nextPlayer+1)].getHand());
                 //pickACorrectSuit(nextPlayer, false);
             }
 
