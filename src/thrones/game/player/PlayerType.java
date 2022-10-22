@@ -34,7 +34,7 @@ public abstract class PlayerType {
             return false;
         }
         if (numPile == 1 &&  cardSuit.isMagic()) {
-            System.out.println("check");
+            //System.out.println("check");
             return false;
         }
 
@@ -42,7 +42,7 @@ public abstract class PlayerType {
     }
 
     public abstract Optional<Card> correctSuit(Hand current, boolean isCharacter, int[] pile0ProcessRank,
-                    int[] pile1ProcessRank, Hand next);
+                    int[] pile1ProcessRank, Hand next, int playerIndex);
     /*
     public Optional<Card> correctSuit(Hand hand, boolean isCharacter) {
         //start of code change

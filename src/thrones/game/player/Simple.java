@@ -24,7 +24,7 @@ public class Simple extends PlayerType {
 
 
     public Optional<Card> correctSuit(Hand hand, boolean isCharacter, int[] pile0ProcessRank,
-                                      int[] pile1ProcessRank, Hand next) {
+                                      int[] pile1ProcessRank, Hand next, int playerIndex) {
         //start of code change
         Hand currentHand = hand;
         Card selectedCard;
