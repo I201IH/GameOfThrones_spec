@@ -41,6 +41,8 @@ public abstract class PlayerType {
         return true;
     }
 
+    public abstract Optional<Card> correctSuit(Hand hand, boolean isCharacter);
+    /*
     public Optional<Card> correctSuit(Hand hand, boolean isCharacter) {
         //start of code change
         Hand currentHand = hand;
@@ -68,6 +70,8 @@ public abstract class PlayerType {
         return cardSelected;
 
     }
+
+     */
 
 
     public abstract int selectPile(Card card, int index);

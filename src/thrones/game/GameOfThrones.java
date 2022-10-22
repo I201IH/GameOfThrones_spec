@@ -313,6 +313,8 @@ public class GameOfThrones extends CardGame {
 
         //start of code change
         Hand currentHand = players[playerIndex].getHand();
+       // Card check = currentHand[0];
+        //players[playerIndex].getHand().getCard().getRankId()
         List<Card> shortListCards = new ArrayList<>();
         for (int i = 0; i < currentHand.getCardList().size(); i++) {
             Card card = currentHand.getCardList().get(i);
