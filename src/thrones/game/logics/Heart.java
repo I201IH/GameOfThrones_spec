@@ -1,6 +1,8 @@
-package thrones.game;
+package thrones.game.logics;
 
-public class Heart implements CardInterface{
+import thrones.game.logics.CardInterface;
+
+public class Heart implements CardInterface {
     private int value;
 
     public Heart(int value) {

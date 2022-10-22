@@ -1,4 +1,4 @@
-package thrones.game;
+package thrones.game.logics;
 
 public abstract class CardDecorator implements CardInterface {
     private CardInterface decoratedCard;

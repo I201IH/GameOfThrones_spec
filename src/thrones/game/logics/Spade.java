@@ -1,8 +1,10 @@
-package thrones.game;
+package thrones.game.logics;
 
-public class Club extends CardDecorator {
+import thrones.game.logics.CardDecorator;
+import thrones.game.logics.CardInterface;
 
-    public Club(CardInterface decoratedCard, int value) {
+public class Spade extends CardDecorator {
+    public Spade(CardInterface decoratedCard, int value) {
         super(decoratedCard, value);
     }
 

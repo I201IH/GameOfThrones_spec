@@ -1,14 +1,14 @@
-package thrones.game;
+package thrones.game.logics;
 
-public class Spade extends CardDecorator {
-    public Spade(CardInterface decoratedCard, int value) {
+public class Diamond extends CardDecorator {
+    public Diamond(CardInterface decoratedCard, int value) {
         super(decoratedCard, value);
     }
 
     @Override
     public int value() {
         int decoratedCardValue = super.getDecoratedCard().value();
-        decoratedCardValue += super.value();
+        decoratedCardValue -= super.value();
         return decoratedCardValue;
     }
 }
