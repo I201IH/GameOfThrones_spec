@@ -423,12 +423,14 @@ public class GameOfThrones extends CardGame {
                 // double value
                 checkedCardValue = canDoubleValue(checkedCardValue, previousCardValue);
 
-                // increase attack score
+                // adjust attack score
                 if (checkedCard.isAttack()) {
                     attackRank += checkedCardValue;
                     int[] result = checkForDiamond(i, currentPile, attackRank);
                     i = result[0];
                     attackRank = result[1];
+
+                // adjust defence score
                 } else if (checkedCard.isDefence()) {
                     defenceRank += checkedCardValue;
                     int[] result = checkForDiamond(i, currentPile, defenceRank);
