@@ -8,10 +8,14 @@ public abstract class PlayerType {
     private Hand hand;
     private int score;
     private int playerIndex;
+    private String playerType;
 
     protected PlayingStrategy strategy;
 
-    public PlayerType(){}
+    public PlayerType(int playerIndex, String playerType){
+        this.playerIndex = playerIndex;
+        this.playerType =playerType;
+    }
 
 
 

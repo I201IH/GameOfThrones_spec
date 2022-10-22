@@ -16,18 +16,18 @@ public class PlayerFactory {
         return playerFactory;
     }
 
-    public PlayerType getPlayer (String playerType){
+    public PlayerType getPlayer (int playerIndex, String playerType){
         if (playerType.equals("human")){
-            return new Human();
+            return new Human(playerIndex, playerType);
         }
         else if (playerType.equals("random")){
-            return new Random();
+            return new Random(playerIndex, playerType);
         }
         else if (playerType.equals("smart")){
-            return new Smart();
+            return new Smart(playerIndex, playerType);
         }
         else {
-            return new Simple();
+            return new Simple(playerIndex, playerType);
         }
 
     }

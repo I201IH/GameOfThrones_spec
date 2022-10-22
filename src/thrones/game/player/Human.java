@@ -12,8 +12,10 @@ public class Human extends PlayerType {
     private Optional<Card> selected;
     private int pile;
 
-
-
+    public Human(int playerId, String playerType) {
+        super(playerId, playerType);
+    }
+    /*
     public void setInteraction(){
         Hand currentHand = getHand();
 
@@ -30,7 +32,7 @@ public class Human extends PlayerType {
             });
 
     }
-
+    */
 
 
 }

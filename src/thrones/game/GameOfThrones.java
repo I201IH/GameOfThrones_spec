@@ -31,6 +31,43 @@ public class GameOfThrones extends CardGame {
     }
 
     private void dealingOut(Hand[] hands, int nbPlayers, int nbCardsPerPlayer) {
+
+        //start of code change
+        //change all hands to players[i].getHand()
+        Hand pack = deck.toHand(false);
+        assert pack.getNumberOfCards() == 52 : " Starting pack is not 52 cards.";
+        // Remove 4 Aces
+        List<Card> aceCards = pack.getCardsWithRank(Rank.ACE);
+        for (Card card : aceCards) {
+            card.removeFromHand(false);
+        }
+        assert pack.getNumberOfCards() == 48 : " Pack without aces is not 48 cards.";
+        // Give each player 3 heart cards
+        for (int i = 0; i < nbPlayers; i++) {
+            for (int j = 0; j < 3; j++) {
+                List<Card> heartCards = pack.getCardsWithSuit(Suit.HEARTS);
+                int x = random.nextInt(heartCards.size());
+                Card randomCard = heartCards.get(x);
+                randomCard.removeFromHand(false);
+                players[i].getHand().insert(randomCard, false);
+            }
+        }
+        assert pack.getNumberOfCards() == 36 : " Pack without aces and hearts is not 36 cards.";
+        // Give each player 9 of the remaining cards
+        for (int i = 0; i < nbCardsPerPlayer; i++) {
+            for (int j = 0; j < nbPlayers; j++) {
+                assert !pack.isEmpty() : " Pack has prematurely run out of cards.";
+                Card dealt = randomCard(pack);
+                dealt.removeFromHand(false);
+                players[j].getHand().insert(dealt, false);
+            }
+        }
+        for (int j = 0; j < nbPlayers; j++) {
+            assert players[j].getHand().getNumberOfCards() == 12 : " Hand does not have twelve cards.";
+        }
+
+
+        /*
         Hand pack = deck.toHand(false);
         assert pack.getNumberOfCards() == 52 : " Starting pack is not 52 cards.";
         // Remove 4 Aces
@@ -62,6 +99,8 @@ public class GameOfThrones extends CardGame {
         for (int j = 0; j < nbPlayers; j++) {
             assert hands[j].getNumberOfCards() == 12 : " Hand does not have twelve cards.";
         }
+        */
+        //end of orginal code
     }
 
     private final String version = "1.0";
@@ -96,7 +135,7 @@ public class GameOfThrones extends CardGame {
 
     private Actor[] pileTextActors = { null, null };
     private Actor[] scoreActors = {null, null, null, null};
-    private final int watchingTime = 5000;
+    private int watchingTime = 5000;
     private Hand[] hands;
     private Hand[] piles;
     private final String[] playerTeams = { "[Players 0 & 2]", "[Players 1 & 3]"};
@@ -151,14 +190,67 @@ public class GameOfThrones extends CardGame {
 
     private void setupGame(Properties properties) {
 
+        //initial with property file
+        initProperties(properties);
 
+        //Create player by PlayerFactory
+        players = new PlayerType[nbPlayers];
+        PlayerFactory playerFactory = PlayerFactory.getInstance();
+        //create different types of player from property file
+        for (int i = 0; i < nbPlayers; i++) {
+            players[i] = playerFactory.getPlayer(i,properties.getProperty(String.format("players.%d", i)));
+        }
+        //give each player a deck as the original hand
+        for (int i = 0; i < nbPlayers; i++) {
+            players[i].setHand(new Hand(deck));
+        }
+        //deal out
+        //dealingOut method also need to change
+        dealingOut(hands, nbPlayers, nbStartCards);
+
+        // get Hand
+        for (int i = 0; i < nbPlayers; i++) {
+            players[i].getHand().sort(Hand.SortType.SUITPRIORITY, true);
+            System.out.println("hands[" + i + "]: " + canonical(players[i].getHand()));
+        }
+
+
+        // for human player
+        for (int i=0; i< nbPlayers; i++) {
+            // Set up human player for interaction
+            final Hand currentHand = players[i].getHand();
+            currentHand.addCardListener(new CardAdapter() {
+                public void leftDoubleClicked(Card card) {
+                    selected = Optional.of(card);
+                    currentHand.setTouchEnabled(false);
+                }
+                public void rightClicked(Card card) {
+                    selected = Optional.empty(); // Don't care which card we right-clicked for player to pass
+                    currentHand.setTouchEnabled(false);
+                }
+            });
+        }
+
+        // graphics
+        RowLayout[] layouts = new RowLayout[nbPlayers];
+        for (int i = 0; i < nbPlayers; i++) {
+            layouts[i] = new RowLayout(handLocations[i], handWidth);
+            layouts[i].setRotationAngle(90 * i);
+            players[i].getHand().setView(this, layouts[i]);
+            players[i].getHand().draw();
+        }
+        // End graphics
+
+        // end of change
+
+        /*
         hands = new Hand[nbPlayers];
         for (int i = 0; i < nbPlayers; i++) {
             hands[i] = new Hand(deck);
         }
         dealingOut(hands, nbPlayers, nbStartCards);
 
-        //得到手牌Hand
+        // get Hand
         for (int i = 0; i < nbPlayers; i++) {
             hands[i].sort(Hand.SortType.SUITPRIORITY, true);
             System.out.println("hands[" + i + "]: " + canonical(hands[i]));
@@ -187,6 +279,7 @@ public class GameOfThrones extends CardGame {
             hands[i].setView(this, layouts[i]);
             hands[i].draw();
         }
+        */
         // End graphics
     }
 
@@ -215,6 +308,29 @@ public class GameOfThrones extends CardGame {
     }
 
     private void pickACorrectSuit(int playerIndex, boolean isCharacter) {
+
+
+        //start of code change
+        Hand currentHand = players[playerIndex].getHand();
+        List<Card> shortListCards = new ArrayList<>();
+        for (int i = 0; i < currentHand.getCardList().size(); i++) {
+            Card card = currentHand.getCardList().get(i);
+            Suit suit = (Suit) card.getSuit();
+            if (suit.isCharacter() == isCharacter) {
+                shortListCards.add(card);
+            }
+        }
+        if (shortListCards.isEmpty() || !isCharacter && random.nextInt(3) == 0) {
+            selected = Optional.empty();
+        } else {
+            selected = Optional.of(shortListCards.get(random.nextInt(shortListCards.size())));
+        }
+
+        //end of code change
+
+
+        //Start of original code
+        /*
         Hand currentHand = hands[playerIndex];
         List<Card> shortListCards = new ArrayList<>();
         for (int i = 0; i < currentHand.getCardList().size(); i++) {
@@ -229,6 +345,9 @@ public class GameOfThrones extends CardGame {
         } else {
             selected = Optional.of(shortListCards.get(random.nextInt(shortListCards.size())));
         }
+
+         */
+        //end of original code
     }
 
     private void selectRandomPile() {
@@ -378,9 +497,17 @@ public class GameOfThrones extends CardGame {
         resetPile();
 
         nextStartingPlayer = getPlayerIndex(nextStartingPlayer);
+        if (players[nextStartingPlayer].getHand().getNumberOfCardsWithSuit(Suit.HEARTS) == 0)
+            nextStartingPlayer = getPlayerIndex(nextStartingPlayer + 1);
+        assert players[nextStartingPlayer].getHand().getNumberOfCardsWithSuit(Suit.HEARTS) != 0 : " Starting player has no hearts.";
+        //Original
+        /*
         if (hands[nextStartingPlayer].getNumberOfCardsWithSuit(Suit.HEARTS) == 0)
             nextStartingPlayer = getPlayerIndex(nextStartingPlayer + 1);
         assert hands[nextStartingPlayer].getNumberOfCardsWithSuit(Suit.HEARTS) != 0 : " Starting player has no hearts.";
+
+         */
+        //end
 
         // 1: play the first 2 hearts
         for (int i = 0; i < 2; i++) {
@@ -498,6 +625,14 @@ public class GameOfThrones extends CardGame {
         setStatusText(text);
 
         refresh();
+    }
+
+    //Put this in setUp method
+    private void initProperties(Properties properties){
+        this.seed = Integer.parseInt(properties.getProperty("seed"));
+        this.random = new Random(seed);
+        this.watchingTime = Integer.parseInt(properties.getProperty("watchingTime"));
+        this.nextStartingPlayer = random.nextInt(nbPlayers);
     }
 
     public static void main(String[] args) {
