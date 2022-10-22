@@ -1,5 +1,7 @@
 package thrones.game.player;
 
+import ch.aplu.jcardgame.Card;
+import thrones.game.GameOfThrones;
 import thrones.game.factory.StrategyFactory;
 
 public class Smart extends PlayerType {

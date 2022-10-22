@@ -24,6 +24,23 @@ public abstract class PlayerType {
         this.playerType =playerType;
     }
 
+    public boolean isLegal(Card card, Hand selectedPile){
+        int numPile = selectedPile.getNumberOfCards();
+        CardLogic.Suit cardSuit = (CardLogic.Suit) card.getSuit();
+        if (numPile == 0 && !cardSuit.isCharacter()){
+            return false;
+        }
+        if (numPile > 0 &&  cardSuit.isCharacter()) {
+            return false;
+        }
+        if (numPile == 1 &&  cardSuit.isMagic()) {
+            //System.out.println("check");
+            return false;
+        }
+
+        return true;
+    }
+
     public Optional<Card> correctSuit(Hand hand, boolean isCharacter) {
         //start of code change
         Hand currentHand = hand;
@@ -53,6 +70,7 @@ public abstract class PlayerType {
     }
 
 
+    public abstract int selectPile(Card card, int index);
 
     public Hand getHand(){
         return hand;

@@ -179,11 +179,13 @@ public class GameOfThrones extends CardGame {
     }
 
     private Optional<Card> selected;
+    private Card selectedCard;
     private final int NON_SELECTION_VALUE = -1;
     private int selectedPileIndex = NON_SELECTION_VALUE;
     private final int UNDEFINED_INDEX = -1;
     private final int ATTACK_RANK_INDEX = 0;
     private final int DEFENCE_RANK_INDEX = 1;
+    private boolean isLose = false;
 
 
 
@@ -497,6 +499,24 @@ public class GameOfThrones extends CardGame {
         return index % nbPlayers;
     }
 
+    private boolean isLose(int[] rank0, int[] rank1, int teamIndex){
+
+        if (teamIndex % 2 == 0){
+            if (rank0[ATTACK_RANK_INDEX] < rank1[DEFENCE_RANK_INDEX]
+                    || rank1[ATTACK_RANK_INDEX] > rank0[DEFENCE_RANK_INDEX]){
+                isLose = true;
+            }
+        }
+
+        if (teamIndex % 2 == 1){
+            if (rank1[ATTACK_RANK_INDEX] < rank0[DEFENCE_RANK_INDEX]
+                    || rank0[ATTACK_RANK_INDEX] > rank1[DEFENCE_RANK_INDEX]){
+                isLose = true;
+            }
+        }
+        return isLose;
+    }
+
     private void executeAPlay() {
         resetPile();
 
@@ -551,12 +571,19 @@ public class GameOfThrones extends CardGame {
                 if (humanPlayers[nextPlayer]) {
                     waitForPileSelection();
                 } else {
-                    selectRandomPile();
+                    selectedPileIndex = players[nextPlayer].selectPile(players[nextPlayer].getCard(), nextPlayer);
+                    //selectRandomPile();x
                 }
                 System.out.println("Player " + nextPlayer + " plays " + canonical(selected.get()) + " on pile " + selectedPileIndex);
 
                 selected.get().setVerso(false);
-                selected.get().transfer(piles[selectedPileIndex], true); // transfer to pile (includes graphic effect)
+                //System.out.println(players[nextPlayer].getCard());
+
+                if (players[nextPlayer].isLegal(players[nextPlayer].getCard(), piles[selectedPileIndex])){
+                    selected.get().transfer(piles[selectedPileIndex], true); // transfer to pile (includes graphic effect)
+                }
+
+                //selected.get().transfer(piles[selectedPileIndex], true); // transfer to pile (includes graphic effect)
                 updatePileRanks();
             } else {
                 setStatusText("Pass.");

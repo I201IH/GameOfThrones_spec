@@ -3,6 +3,7 @@ package thrones.game.player;
 import ch.aplu.jcardgame.Card;
 import ch.aplu.jcardgame.CardAdapter;
 import ch.aplu.jcardgame.Hand;
+import thrones.game.GameOfThrones;
 
 import java.util.Optional;
 
@@ -14,6 +15,16 @@ public class Human extends PlayerType {
 
     public Human(int playerId, String playerType) {
         super(playerId, playerType);
+    }
+
+    @Override
+    public int selectPile(Card card, int playerIndex){
+        int pileIndex = -1;
+        //If magic put on opposing
+        //If Defence & Attack, put own team
+
+        pileIndex = GameOfThrones.random.nextInt(2);
+        return pileIndex;
     }
     /*
     public void setInteraction(){
