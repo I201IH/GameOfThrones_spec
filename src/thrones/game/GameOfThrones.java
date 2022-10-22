@@ -5,7 +5,6 @@ package thrones.game;
 import ch.aplu.jcardgame.*;
 import ch.aplu.jgamegrid.*;
 import thrones.game.logics.*;
-import thrones.game.logics.CardLogic.*;
 import thrones.game.factory.PlayerFactory;
 import thrones.game.player.PlayerType;
 
