@@ -25,6 +25,8 @@ public class GameOfThrones extends CardGame {
     public static final String DEFAULT_PATH = "properties/original.properties";
     public static final String DEFAULT_SEED = "30006";
     public static final String DEFAULT_WATCHING_TIME = "5000";
+
+    public static UIHandler uiHandler = new UIHandler();
     static public int seed;
     public static Random random;
     private PlayerType[] players;
@@ -58,8 +60,8 @@ public class GameOfThrones extends CardGame {
                 List<Card> heartCards = pack.getCardsWithSuit(Suit.HEARTS);
                 int x = random.nextInt(heartCards.size());
                 Card randomCard = heartCards.get(x);
-                randomCard.removeFromHand(false);
-                players[i].getHand().insert(randomCard, false);
+                uiHandler.removeFromHandUI(randomCard, false);
+                uiHandler.insertUI(players[i].getHand(), randomCard, false);
             }
         }
         assert pack.getNumberOfCards() == 36 : " Pack without aces and hearts is not 36 cards.";
@@ -68,8 +70,8 @@ public class GameOfThrones extends CardGame {
             for (int j = 0; j < nbPlayers; j++) {
                 assert !pack.isEmpty() : " Pack has prematurely run out of cards.";
                 Card dealt = randomCard(pack);
-                dealt.removeFromHand(false);
-                players[j].getHand().insert(dealt, false);
+                uiHandler.removeFromHandUI(dealt, false);
+                uiHandler.insertUI(players[j].getHand(), dealt, false);
             }
         }
         for (int j = 0; j < nbPlayers; j++) {
@@ -117,9 +119,6 @@ public class GameOfThrones extends CardGame {
 
     private int[] scores = new int[nbPlayers];
 
-    Font bigFont = new Font("Arial", Font.BOLD, 36);
-    Font smallFont = new Font("Arial", Font.PLAIN, 10);
-
     // boolean[] humanPlayers = { true, false, false, false};
     boolean[] humanPlayers = { false, false, false, false};
 
@@ -128,13 +127,13 @@ public class GameOfThrones extends CardGame {
         for (int i = 0; i < nbPlayers; i++) {
              scores[i] = 0;
             String text = "P" + i + "-0";
-            scoreActors[i] = new TextActor(text, Color.WHITE, bgColor, bigFont);
+            scoreActors[i] = uiHandler.scoreUI(text, uiHandler.bigFont);
             addActor(scoreActors[i], scoreLocations[i]);
         }
 
         String text = "Attack: 0 - Defence: 0";
         for (int i = 0; i < pileTextActors.length; i++) {
-            pileTextActors[i] = new TextActor(text, Color.WHITE, bgColor, smallFont);
+            pileTextActors[i] = uiHandler.scoreUI(text, uiHandler.smallFont);
             addActor(pileTextActors[i], pileStatusLocations[i]);
         }
     }
@@ -142,7 +141,7 @@ public class GameOfThrones extends CardGame {
     private void updateScore(int player) {
         removeActor(scoreActors[player]);
         String text = "P" + player + "-" + scores[player];
-        scoreActors[player] = new TextActor(text, Color.WHITE, bgColor, bigFont);
+        scoreActors[player] = uiHandler.scoreUI(text, uiHandler.bigFont);
         addActor(scoreActors[player], scoreLocations[player]);
     }
 
@@ -162,8 +161,6 @@ public class GameOfThrones extends CardGame {
     private final int DEFENCE_RANK_INDEX = 1;
     private boolean isLose = false;
 
-
-
     private void setupGame(Properties properties) {
 
         //initial with property file
@@ -179,8 +176,6 @@ public class GameOfThrones extends CardGame {
                 humanPlayers[i] = true;
             }
         }
-
-
 
         //give each player a deck as the original hand
         for (int i = 0; i < nbPlayers; i++) {
@@ -214,13 +209,14 @@ public class GameOfThrones extends CardGame {
         }
 
         // graphics
-        RowLayout[] layouts = new RowLayout[nbPlayers];
-        for (int i = 0; i < nbPlayers; i++) {
-            layouts[i] = new RowLayout(handLocations[i], handWidth);
-            layouts[i].setRotationAngle(90 * i);
-            players[i].getHand().setView(this, layouts[i]);
-            players[i].getHand().draw();
-        }
+        uiHandler.setUpGameUI(nbPlayers, handLocations, handWidth, players, this);
+//        RowLayout[] layouts = new RowLayout[nbPlayers];
+//        for (int i = 0; i < nbPlayers; i++) {
+//            layouts[i] = new RowLayout(handLocations[i], handWidth);
+//            layouts[i].setRotationAngle(90 * i);
+//            players[i].getHand().setView(this, layouts[i]);
+//            players[i].getHand().draw();
+//        }
         // End graphics
 
 
@@ -383,7 +379,7 @@ public class GameOfThrones extends CardGame {
         TextActor currentPile = (TextActor) pileTextActors[pileIndex];
         removeActor(currentPile);
         String text = playerTeams[pileIndex] + " Attack: " + attackRank + " - Defence: " + defenceRank;
-        pileTextActors[pileIndex] = new TextActor(text, Color.WHITE, bgColor, smallFont);
+        pileTextActors[pileIndex] = uiHandler.scoreUI(text, uiHandler.smallFont);
         addActor(pileTextActors[pileIndex], pileStatusLocations[pileIndex]);
     }
 
