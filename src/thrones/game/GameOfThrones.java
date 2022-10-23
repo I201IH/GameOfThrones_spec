@@ -22,7 +22,7 @@ import static thrones.game.logics.CardLogic.*;
  * Ian Han 1180762
  */
 public class GameOfThrones extends CardGame {
-    public static final String DEFAULT_PATH = "properties/original.properties";
+    public static final String DEFAULT_PATH = "properties/got.properties";
     public static final String DEFAULT_SEED = "30006";
     public static final String DEFAULT_WATCHING_TIME = "5000";
 
