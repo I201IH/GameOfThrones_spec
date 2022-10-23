@@ -18,7 +18,8 @@ public class Random extends PlayerType {
     }
 
     public Optional<Card> correctSuit(Hand hand, boolean isCharacter,int[] pile0ProcessRank,
-                                      int[] pile1ProcessRank, Hand next, int playerIndex) {
+                                      int[] pile1ProcessRank, Hand next, int playerIndex,
+                                      Hand pile0, Hand pile1) {
         //start of code change
         Hand currentHand = hand;
         Card selectedCard;

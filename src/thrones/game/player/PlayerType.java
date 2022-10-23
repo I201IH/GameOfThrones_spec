@@ -42,7 +42,7 @@ public abstract class PlayerType {
     }
 
     public abstract Optional<Card> correctSuit(Hand current, boolean isCharacter, int[] pile0ProcessRank,
-                    int[] pile1ProcessRank, Hand next, int playerIndex);
+                    int[] pile1ProcessRank, Hand next, int playerIndex, Hand pile0, Hand pile1);
     /*
     public Optional<Card> correctSuit(Hand hand, boolean isCharacter) {
         //start of code change

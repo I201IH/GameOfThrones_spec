@@ -592,7 +592,7 @@ public class GameOfThrones extends CardGame {
                  */
                 selected = players[playerIndex].correctSuit(players[playerIndex].getHand(), true,
                         pile0ProcessRank, pile1ProcessRank,
-                        players[getPlayerIndex(playerIndex+1)].getHand(), playerIndex);
+                        players[getPlayerIndex(playerIndex+1)].getHand(), playerIndex, piles[0], piles[1]);
                 //pickACorrectSuit(playerIndex, true);
             }
 
@@ -637,7 +637,7 @@ public class GameOfThrones extends CardGame {
 
                 selected = players[nextPlayer].correctSuit(players[nextPlayer].getHand(), false,
                         pile0ProcessRank, pile1ProcessRank,
-                        players[getPlayerIndex(nextPlayer+1)].getHand(), nextPlayer);
+                        players[getPlayerIndex(nextPlayer+1)].getHand(), nextPlayer, piles[0], piles[1]);
                 //pickACorrectSuit(nextPlayer, false);
 
             }
