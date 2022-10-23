@@ -84,30 +84,13 @@ public class GameOfThrones extends CardGame {
     public final int nbStartCards = 9;
 	public final int nbPlays = 6;
 	public final int nbRounds = 3;
-    private final int handWidth = 400;
-    private final int pileWidth = 40;
+    private final int handWidth = uiHandler.getHandWidth();
+    private final int pileWidth = uiHandler.getPileWidth();
     private Deck deck = new Deck(CardLogic.Suit.values(), CardLogic.Rank.values(), "cover");
-    private final Location[] handLocations = {
-            new Location(350, 625),
-            new Location(75, 350),
-            new Location(350, 75),
-            new Location(625, 350)
-    };
-
-    private final Location[] scoreLocations = {
-            new Location(575, 675),
-            new Location(25, 575),
-            new Location(25, 25),
-            new Location(575, 125)
-    };
-    private final Location[] pileLocations = {
-            new Location(350, 280),
-            new Location(350, 430)
-    };
-    private final Location[] pileStatusLocations = {
-            new Location(250, 200),
-            new Location(250, 520)
-    };
+    private final Location[] handLocations = uiHandler.getHandLocations();
+    private final Location[] scoreLocations = uiHandler.getScoreLocations();
+    private final Location[] pileLocations = uiHandler.getPileLocations();
+    private final Location[] pileStatusLocations = uiHandler.getPileStatusLocations();
 
     private Actor[] pileTextActors = { null, null };
     private Actor[] scoreActors = {null, null, null, null};
