@@ -16,7 +16,9 @@ import static thrones.game.logics.CardLogic.*;
 
 @SuppressWarnings("serial")
 public class GameOfThrones extends CardGame {
-    public static final String DEFAULT_PATH = "properties/got.properties";
+    public static final String DEFAULT_PATH = "properties/smart.properties";
+    public static final String DEFAULT_SEED = "30006";
+    public static final String DEFAULT_WATCHING_TIME = "5000";
     static public int seed;
     public static Random random;
     private PlayerType[] players;
@@ -403,7 +405,8 @@ public class GameOfThrones extends CardGame {
 
                  */
                 if (isCharacter && suit != null && suit.isCharacter() ||         // If we want character, can't pass and suit must be right
-                        !isCharacter && (suit == null || !suit.isCharacter())) { // If we don't want character, can pass or suit must not be character
+                        !isCharacter && (suit == null || !suit.isCharacter())
+                        ) { // If we don't want character, can pass or suit must not be character
                     // if (suit != null && suit.isCharacter() == isCharacter) {
                     break;
                 } else {
@@ -779,9 +782,9 @@ public class GameOfThrones extends CardGame {
 
     //Put this in setUp method
     private void initProperties(Properties properties){
-        this.seed = Integer.parseInt(properties.getProperty("seed"));
+        this.seed = Integer.parseInt(properties.getProperty("seed", DEFAULT_SEED));
         this.random = new Random(seed);
-        this.watchingTime = Integer.parseInt(properties.getProperty("watchingTime"));
+        this.watchingTime = Integer.parseInt(properties.getProperty("watchingTime", DEFAULT_WATCHING_TIME));
         this.nextStartingPlayer = random.nextInt(nbPlayers);
     }
 
