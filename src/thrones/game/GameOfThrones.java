@@ -580,6 +580,16 @@ public class GameOfThrones extends CardGame {
             if (humanPlayers[playerIndex]) {
                 waitForCorrectSuit(playerIndex, true);
             } else {
+                /*
+                if (playerIndex==0){
+                    System.out.println("During play heart");
+                    System.out.println("piles[0]: " + canonical(piles[0]));
+                    System.out.println("piles[0] is " + "Attack: " + pile0ProcessRank[ATTACK_RANK_INDEX] + " - Defence: " + pile0ProcessRank[DEFENCE_RANK_INDEX]);
+                    System.out.println("piles[1]: " + canonical(piles[1]));
+                    System.out.println("piles[1] is " + "Attack: " + pile1ProcessRank[ATTACK_RANK_INDEX] + " - Defence: " + pile1ProcessRank[DEFENCE_RANK_INDEX]);
+                }
+
+                 */
                 selected = players[playerIndex].correctSuit(players[playerIndex].getHand(), true,
                         pile0ProcessRank, pile1ProcessRank,
                         players[getPlayerIndex(playerIndex+1)].getHand(), playerIndex);
@@ -602,6 +612,8 @@ public class GameOfThrones extends CardGame {
 
         while(remainingTurns > 0) {
             nextPlayer = getPlayerIndex(nextPlayer);
+            pile0ProcessRank = calculatePileRanks(0);
+            pile1ProcessRank = calculatePileRanks(1);
             /*
             if (nextPlayer==1){
                 System.out.println("Check");
@@ -612,10 +624,22 @@ public class GameOfThrones extends CardGame {
             if (humanPlayers[nextPlayer]) {
                 waitForCorrectSuit(nextPlayer, false);
             } else {
+                /*
+                if (nextPlayer==0){
+                    System.out.println("After play heart");
+                    System.out.println("piles[0]: " + canonical(piles[0]));
+                    System.out.println("piles[0] is " + "Attack: " + pile0ProcessRank[ATTACK_RANK_INDEX] + " - Defence: " + pile0ProcessRank[DEFENCE_RANK_INDEX]);
+                    System.out.println("piles[1]: " + canonical(piles[1]));
+                    System.out.println("piles[1] is " + "Attack: " + pile1ProcessRank[ATTACK_RANK_INDEX] + " - Defence: " + pile1ProcessRank[DEFENCE_RANK_INDEX]);
+                }
+
+                 */
+
                 selected = players[nextPlayer].correctSuit(players[nextPlayer].getHand(), false,
                         pile0ProcessRank, pile1ProcessRank,
                         players[getPlayerIndex(nextPlayer+1)].getHand(), nextPlayer);
                 //pickACorrectSuit(nextPlayer, false);
+
             }
 
             if (selected.isPresent()) {
@@ -660,8 +684,23 @@ public class GameOfThrones extends CardGame {
 
 
 
+
                 //selected.get().transfer(piles[selectedPileIndex], true); // transfer to pile (includes graphic effect)
                 updatePileRanks();
+
+                /*
+                if (nextPlayer==0){
+                    System.out.println("After play heart + after smart choose: ");
+                    pile0ProcessRank = calculatePileRanks(0);
+                    pile1ProcessRank = calculatePileRanks(1);
+                    System.out.println("After play heart");
+                    System.out.println("piles[0]: " + canonical(piles[0]));
+                    System.out.println("piles[0] is " + "Attack: " + pile0ProcessRank[ATTACK_RANK_INDEX] + " - Defence: " + pile0ProcessRank[DEFENCE_RANK_INDEX]);
+                    System.out.println("piles[1]: " + canonical(piles[1]));
+                    System.out.println("piles[1] is " + "Attack: " + pile1ProcessRank[ATTACK_RANK_INDEX] + " - Defence: " + pile1ProcessRank[DEFENCE_RANK_INDEX]);
+                }
+
+                 */
             } else {
                 setStatusText("Pass.");
             }

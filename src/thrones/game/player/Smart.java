@@ -16,6 +16,7 @@ public class Smart extends PlayerType {
 
     private boolean isLose = false;
     private boolean isMagicE = false;
+    private int selectedPile = -1;
 
     public Smart(int playerId, String playerType){
         super(playerId, playerType);
