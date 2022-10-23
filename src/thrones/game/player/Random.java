@@ -14,7 +14,6 @@ public class Random extends PlayerType {
 
     public Random(int playerId, String playerType){
         super(playerId, playerType);
-        this.strategy = StrategyFactory.getInstance().getStrategy("RANDOM");
     }
 
     public Optional<Card> correctSuit(Hand hand, boolean isCharacter,int[] pile0ProcessRank,

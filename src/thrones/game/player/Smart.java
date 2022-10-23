@@ -20,7 +20,6 @@ public class Smart extends PlayerType {
 
     public Smart(int playerId, String playerType){
         super(playerId, playerType);
-        this.strategy = StrategyFactory.getInstance().getStrategy("SMART");
     }
 
 
@@ -67,21 +66,6 @@ public class Smart extends PlayerType {
 
         //when select suit is Attack & defence, to own team
         //when magic to another team
-
-        /*
-        int pileIndex = -1;
-        //If magic put on opposing
-
-        //If Defence & Attack, put own team
-
-        if (getSelectedPile()==-1){
-            pileIndex = GameOfThrones.random.nextInt(2);
-        }
-        else {
-            pileIndex = getSelectedPile();
-        }
-
-         */
 
         int pileIndex = -1;
         int teamPile = playerIndex % 2;
@@ -208,10 +192,6 @@ public class Smart extends PlayerType {
                                 }
                             }
                         }
-                        else if (((Suit)last1.getSuit()).isMagic()){
-                            //
-
-                        }
                     }
                 }
                 // pile 0 attack < pile 1 defence and pile 0 defence < pile 1 attack
@@ -229,7 +209,6 @@ public class Smart extends PlayerType {
                     //requiredCardList = attackCardList + defenceCardList;
                 }
                 else {
-                    //System.out.println("Not meet two lose");
                     //Not meet both lose situation
                     //put cardList in required cardList
                     requiredCardList = defenceCardList;
@@ -395,53 +374,10 @@ public class Smart extends PlayerType {
             else {
                 chosen = Optional.empty();
             }
-
-
-            /*
-            cardSelected = requiredCardList.get(GameOfThrones.random.nextInt(requiredCardList.size()));
-            System.out.println("Check");
-            isMagicE = isMagicE(cardSelected, nextPlayer);
-            System.out.println("isMagicE is " + isMagicE);
-
-            int length = requiredCardList.size();
-            while(isMagicE || length==0){
-                System.out.println("isMagicE is " + isMagicE);
-                isMagicE = isMagicE(cardSelected, nextPlayer);
-                cardSelected = requiredCardList.get(GameOfThrones.random.nextInt(requiredCardList.size()));
-                length --;
-            }
-            if (length==0){
-                chosen = Optional.empty();
-            }
-            else {
-                // System.out.println("card rank is "+ ((Rank)cardSelected.getRank()).getRankValue());
-                chosen = Optional.of(cardSelected);
-                setSelectedPile(teamIndex);
-            }
-
-             */
-
         }
         return chosen;
     }
 
-    //No magic card in another player can double
-    public boolean isMagicE(Card card, Hand nextPlayer){
-        isMagicE = false;
-        int rankCard = ((Rank) card.getRank()).getRankValue();
-        int nextRank = -1;
-        for (int i = 0; i < nextPlayer.getNumberOfCards(); i++){
-            nextRank = ((Rank)nextPlayer.get(i).getRank()).getRankValue();
-            if (nextRank == rankCard){
-                isMagicE = true;
-                return isMagicE;
-            }
-            System.out.println("isMagicE is " + isMagicE);
-        }
-
-
-        return isMagicE;
-    }
 
     public boolean getIsLose(){
         return isLose;
