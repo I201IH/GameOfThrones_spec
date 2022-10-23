@@ -11,17 +11,41 @@ import java.util.Optional;
 
 import static thrones.game.logics.CardLogic.*;
 
+/**
+ * Workshop 4 Friday 9:00, Team 12
+ * Yi Wei 1166107
+ * Thanh Nguyen Pham 1166068
+ * Ian Han 1180762
+ */
+
 public class Smart extends PlayerType {
 
     private boolean isLose = false;
     private boolean isMagicE = false;
     private int selectedPile = -1;
 
+    /**
+     * Smart Constructor, represents the playerIndex and type of player
+     * @param playerId the index of player from property file
+     * @param playerType the type of player, should be smart
+     */
     public Smart(int playerId, String playerType){
         super(playerId, playerType);
     }
 
-
+    /**
+     * correctSuit method used to pick card with correct suit for smart player
+     * Divides into play heart and non-heart two main aspects
+     * @param hand the current hand for player
+     * @param isCharacter if card is allowed to be heart
+     * @param pile0ProcessRank the attack and defence value for character 0
+     * @param pile1ProcessRank the attack and defence value for character 1
+     * @param next the next Player hand
+     * @param playerIndex the current player index
+     * @param pile0 the hand of pile 0
+     * @param pile1 the hand of pile 0
+     * @return the selected card with type Optional<Card>
+     */
     public Optional<Card> correctSuit(Hand hand, boolean isCharacter, int[] pile0ProcessRank,
                                       int[] pile1ProcessRank, Hand next, int playerIndex,
                                       Hand pile0, Hand pile1) {
@@ -42,7 +66,6 @@ public class Smart extends PlayerType {
         }
 
 
-
         if (shortListCards.isEmpty() ) {
             cardSelected = Optional.empty();
         }
@@ -60,6 +83,12 @@ public class Smart extends PlayerType {
 
     }
 
+    /**
+     * this method used to select the pile for selected card
+     * @param card the selected card
+     * @param playerIndex the index of player
+     * @return the index of selected pile
+     */
     @Override
     public int selectPile(Card card, int playerIndex){
 
@@ -82,6 +111,18 @@ public class Smart extends PlayerType {
 
         return pileIndex;
     }
+
+    /**
+     * This method used to describe the smart player strategy to choose card when non-heart
+     * @param pile0rank the pile 0 attack and defence scores
+     * @param pile1rank the pile 1 attack and defence scores
+     * @param teamIndex the index of team of current player
+     * @param currentPlayer the hand of current player
+     * @param nextPlayer the hand of next player
+     * @param pile0 the hand of pile 0
+     * @param pile1 the hand of pile 1
+     * @return the selected card (suit is non-heart)
+     */
 
     public Optional<Card> isLose(int[] pile0rank, int[] pile1rank, int teamIndex, Hand currentPlayer, Hand nextPlayer,
                                  Hand pile0, Hand pile1){
@@ -377,30 +418,23 @@ public class Smart extends PlayerType {
         return chosen;
     }
 
-
-    public boolean getIsLose(){
-        return isLose;
-    }
+    /**
+     * setter to set the isLose value
+     * @param isLose if smart player not played the card, if the battle lose
+     */
     public void setIsLose(boolean isLose){
         this.isLose = isLose;
     }
 
 
-    public void setMagicE(boolean isMagicE){
-        this.isMagicE = isMagicE;
-    }
-
-    public boolean getMagicE(){
-        return isMagicE;
-    }
-
+    /**
+     * setter to set the selected pile for card
+     * @param selectedPile the index of selected pile
+     */
     public void setSelectedPile(int selectedPile){
         this.selectedPile = selectedPile;
     }
 
-    public int getSelectedPile(){
-        return selectedPile;
-    }
 
 
 }

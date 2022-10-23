@@ -15,8 +15,14 @@ import java.util.*;
 import static thrones.game.logics.CardLogic.*;
 
 @SuppressWarnings("serial")
+/**
+ * Workshop 4 Friday 9:00, Team 12
+ * Yi Wei 1166107
+ * Thanh Nguyen Pham 1166068
+ * Ian Han 1180762
+ */
 public class GameOfThrones extends CardGame {
-    public static final String DEFAULT_PATH = "properties/got.properties";
+    public static final String DEFAULT_PATH = "properties/original.properties";
     public static final String DEFAULT_SEED = "30006";
     public static final String DEFAULT_WATCHING_TIME = "5000";
     static public int seed;
@@ -279,14 +285,12 @@ public class GameOfThrones extends CardGame {
         for (Hand pile : piles) {
             pile.setTouchEnabled(true);
         }
-        System.out.println("selectedPileIndex is "+ selectedPileIndex);
         while(selectedPileIndex == NON_SELECTION_VALUE) {
             delay(100);
         }
         for (Hand pile : piles) {
             pile.setTouchEnabled(false);
         }
-        System.out.println("After for loop: selectedPileIndex is "+ selectedPileIndex);
     }
 
     private int[] calculatePileRanks(int pileIndex) {
@@ -394,23 +398,6 @@ public class GameOfThrones extends CardGame {
         return index % nbPlayers;
     }
 
-    private boolean isLose(int[] rank0, int[] rank1, int teamIndex){
-
-        if (teamIndex % 2 == 0){
-            if (rank0[ATTACK_RANK_INDEX] < rank1[DEFENCE_RANK_INDEX]
-                    || rank1[ATTACK_RANK_INDEX] > rank0[DEFENCE_RANK_INDEX]){
-                isLose = true;
-            }
-        }
-
-        if (teamIndex % 2 == 1){
-            if (rank1[ATTACK_RANK_INDEX] < rank0[DEFENCE_RANK_INDEX]
-                    || rank0[ATTACK_RANK_INDEX] > rank1[DEFENCE_RANK_INDEX]){
-                isLose = true;
-            }
-        }
-        return isLose;
-    }
 
     private void executeAPlay() {
         resetPile();
@@ -606,7 +593,10 @@ public class GameOfThrones extends CardGame {
         refresh();
     }
 
-    //Put this in setUp method
+    /**
+     * initialize the property parameters into project
+     * @param properties the property file
+     */
     private void initProperties(Properties properties){
         this.seed = Integer.parseInt(properties.getProperty("seed", DEFAULT_SEED));
         this.random = new Random(seed);

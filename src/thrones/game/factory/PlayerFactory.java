@@ -16,6 +16,12 @@ public class PlayerFactory {
         return playerFactory;
     }
 
+    /**
+     * create different player by the property player string
+     * @param playerIndex the index of player
+     * @param playerType the type of player
+     * @return the class of specified player
+     */
     public PlayerType getPlayer (int playerIndex, String playerType){
         if (playerType.equals("human")){
             return new Human(playerIndex, playerType);
