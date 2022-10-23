@@ -349,6 +349,12 @@ public class GameOfThrones extends CardGame {
         return new int[] { attackHeart.value(), defenceHeart.value() };
     }
 
+    /**
+     * Check if two consecutive cards have the same value
+     * @param checkedCardValue current checked card
+     * @param previousCardValue card before it
+     * @return double the value of checked card if the two have the same value
+     */
     private int canDoubleValue(int checkedCardValue, int previousCardValue) {
         if (checkedCardValue == previousCardValue) {
             checkedCardValue *= 2;
@@ -356,6 +362,13 @@ public class GameOfThrones extends CardGame {
         return checkedCardValue;
     }
 
+    /**
+     * Check if there are consecutive diamonds cards
+     * @param i location of the currently checked card
+     * @param currentPile currently checked pile
+     * @param heart which kind of heart to decrease value, attack or defence
+     * @return
+     */
     private int[] checkForDiamond(int i, Hand currentPile, Heart heart) {
         int j;
         for (j = i + 1; j < currentPile.getNumberOfCards(); j++) {

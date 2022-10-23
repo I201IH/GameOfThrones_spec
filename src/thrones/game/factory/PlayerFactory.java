@@ -6,6 +6,17 @@ import thrones.game.player.PlayerType;
 import thrones.game.player.Simple;
 import thrones.game.player.Smart;
 
+/**
+ * Workshop 4 Friday 9:00, Team 12
+ * Yi Wei 1166107
+ * Thanh Nguyen Pham 1166068
+ * Ian Han 1180762
+ */
+
+/**
+ * PlayerFactory class to produce different player types
+ */
+
 public class PlayerFactory {
     private static PlayerFactory playerFactory = new PlayerFactory();
 

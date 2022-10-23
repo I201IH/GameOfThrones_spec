@@ -33,6 +33,13 @@ public abstract class PlayerType {
         this.playerType =playerType;
     }
 
+
+    /**
+     * Check if the move is legal
+     * @param card what card to play
+     * @param selectedPile what pile to put card onto
+     * @return false for legal move and true for illegal move
+     */
     public boolean isLegal(Card card, Hand selectedPile){
         int numPile = selectedPile.getNumberOfCards();
         CardLogic.Suit cardSuit = (CardLogic.Suit) card.getSuit();
@@ -50,10 +57,29 @@ public abstract class PlayerType {
         return true;
     }
 
+    /**
+     * correctSuit method used to pick card with correct suit for smart player
+     * Divides into play heart and non-heart two main aspects
+     * @param current the current hand for player
+     * @param isCharacter if card is allowed to be heart
+     * @param pile0ProcessRank the attack and defence value for character 0
+     * @param pile1ProcessRank the attack and defence value for character 1
+     * @param next the next Player hand
+     * @param playerIndex the current player index
+     * @param pile0 the hand of pile 0
+     * @param pile1 the hand of pile 0
+     * @return the selected card with type Optional<Card>
+     */
     public abstract Optional<Card> correctSuit(Hand current, boolean isCharacter, int[] pile0ProcessRank,
                     int[] pile1ProcessRank, Hand next, int playerIndex, Hand pile0, Hand pile1);
 
 
+    /**
+     * Select a pile to play onto
+     * @param card what card to play
+     * @param index player index
+     * @return pile index
+     */
     public abstract int selectPile(Card card, int index);
 
     public Hand getHand(){

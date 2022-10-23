@@ -6,6 +6,17 @@ import thrones.game.GameOfThrones;
 
 import java.util.stream.Collectors;
 
+/**
+ * Workshop 4 Friday 9:00, Team 12
+ * Yi Wei 1166107
+ * Thanh Nguyen Pham 1166068
+ * Ian Han 1180762
+ */
+
+/**
+ * CardLogic class to determine the value and the suit
+ */
+
 public class CardLogic {
     /*
     Separated the logics of the cards from GameOfThrones class
