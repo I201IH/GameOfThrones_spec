@@ -64,6 +64,11 @@ public class Smart extends PlayerType {
 
     @Override
     public int selectPile(Card card, int playerIndex){
+
+        //when select suit is Attack & defence, to own team
+        //when magic to another team
+
+        /*
         int pileIndex = -1;
         //If magic put on opposing
 
@@ -74,6 +79,21 @@ public class Smart extends PlayerType {
         }
         else {
             pileIndex = getSelectedPile();
+        }
+
+         */
+
+        int pileIndex = -1;
+        int teamPile = playerIndex % 2;
+        //If magic put on opposing
+        //If Defence & Attack, put own team
+        Suit cardSuit = (Suit) card.getSuit();
+        if (cardSuit.isMagic()){
+            //System.out.println("Magic card");
+            pileIndex = (playerIndex +1) % 2;
+        }
+        if (cardSuit.isAttack() || cardSuit.isDefence()){
+            pileIndex = teamPile;
         }
 
 
