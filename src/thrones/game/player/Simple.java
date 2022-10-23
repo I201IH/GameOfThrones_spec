@@ -2,7 +2,6 @@ package thrones.game.player;
 
 import ch.aplu.jcardgame.Card;
 import thrones.game.GameOfThrones;
-import thrones.game.factory.StrategyFactory;
 import ch.aplu.jcardgame.*;
 import ch.aplu.jgamegrid.*;
 import thrones.game.logics.*;
